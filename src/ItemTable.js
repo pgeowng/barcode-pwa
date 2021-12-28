@@ -1,0 +1,63 @@
+import { useCallback } from "react";
+import { observer } from "mobx-react-lite";
+
+export const ItemTable = observer(({ store }) => {
+  const handleCount = useCallback(
+    (idx) => {
+      return (e) => {
+        const value = parseInt(e.target.value);
+        if (value === value) store.updateCount(idx, value);
+      };
+    },
+    [store]
+  );
+
+  return (
+    <table className="App-ItemTable">
+      <thead>
+        <tr>
+          <th> </th> <th> Штрихкод </th> <th> Имя продавца </th>
+          <th> Количество товара </th>
+        </tr>
+      </thead>
+      <tbody>
+        {store.items.map((item, idx) => (
+          <tr key={item.id}>
+            <td>
+              <button type="button"> x </button>
+            </td>
+            <td>
+              <input
+                type="text"
+                value={item.barcode}
+                onChange={(e) => store.updateBarcode(idx, e.target.value)}
+              />
+            </td>
+            <td>
+              <input
+                type="text"
+                value={item.shopName}
+                onChange={(e) => store.updateShopName(idx, e.target.value)}
+              />
+            </td>
+            <td>
+              <input
+                type="number"
+                value={item.count === 0 ? "" : item.count}
+                placeholder="0"
+                onChange={handleCount(idx)}
+              />
+            </td>
+          </tr>
+        ))}
+        <tr>
+          <td colSpan="4">
+            <button type="button" onClick={() => store.createItem()}>
+              Добавить товар
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  );
+});
