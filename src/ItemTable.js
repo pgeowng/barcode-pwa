@@ -1,12 +1,15 @@
 import { useCallback } from "react";
 import { observer } from "mobx-react-lite";
+import { action } from "mobx";
 
 export const ItemTable = observer(({ store }) => {
   const handleCount = useCallback(
     (idx) => {
+      console.log("render handlecount", idx);
       return (e) => {
-        const value = parseInt(e.target.value);
-        if (value === value) store.updateCount(idx, value);
+        console.log("parsed", e.target.value);
+        const value = parseInt(e.target.value || 0);
+        if (!isNaN(value)) store.updateCount(idx, value);
       };
     },
     [store]
@@ -16,7 +19,9 @@ export const ItemTable = observer(({ store }) => {
     <table className="App-ItemTable">
       <thead>
         <tr>
-          <th> </th> <th> Штрихкод </th> <th> Имя продавца </th>
+          <th></th>
+          <th> Штрихкод </th>
+          <th> Имя продавца </th>
           <th> Количество товара </th>
         </tr>
       </thead>

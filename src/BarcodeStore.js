@@ -8,6 +8,9 @@ export class BarcodeStore {
       items: observable,
       createItem: action,
       updateItem: action,
+      updateBarcode: action,
+      updateShopName: action,
+      updateCount: action,
     });
     runInAction(this.prefetchData);
   }
@@ -28,12 +31,25 @@ export class BarcodeStore {
     return this.items[idx];
   }
 
+  updateBarcode(idx, update) {
+    console.log("updating state");
+    this.items[idx].barcode = update;
+  }
+  updateShopName(idx, update) {
+    console.log("updating state");
+    this.items[idx].shopName = update;
+  }
+  updateCount(idx, update) {
+    console.log("updating", update);
+    this.items[idx].count = update;
+  }
+
   prefetchData = () => {
     setTimeout(() => {
       this.createItem({
         id: Date.now(),
         barcode: "12314412",
-        shopName: "Shop Family",
+        shopName: "Some Long Shop Name",
         count: 4,
       });
     }, 1000);
