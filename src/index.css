@@ -5,40 +5,47 @@
 }
 
 html {
-  font-family: sans-serif;
-  font-size: 62.5%; /* 10px */
-  line-height: 1.15;
+  /*font-size: 62.5%; /* 10px */
+  /*line-height: 1.15;*/
 }
 
 body {
+  font-family: 'Source Sans Pro', sans-serif;
   margin: 0;
-  font-size: 1.8rem; /* 18px */
+  /*font-size: 1.8rem;  18px */
   color: #4a4a4a;
 }
 
-
-input, button {
-  font-family: sans-serif;
-  font-size: 100%;
-  line-height: 1.15;
-  margin: 0;
-  overflow: visible;
+:root {
+  --input-border: #8b8b8b;
+  --input-focus-h: 245;
+  --input-focus-s:  100%;
+  --input-focus-l: 42%;
 }
 
-input {
-  color: #4a4a4a;
-  padding: 6px 10px;
-  background-color: #f1f1f1;
-  border: 1px solid #f1f1f1;
+
+/* input reset */
+
+.input {
+  font-size: 16px;
+  font-size: max(16px, 1em);
+  font-family:  inherit;
+  padding:  0.25em 0.5em;
+  background-color: #fff;
+  border: 2px solid var(--input-border);
   border-radius: 4px;
-  box-shadow: none;
+
+  transition:  180ms box-shadow ease-in-out;
 }
 
-input:focus {
-  border: 1px solid #eb99a1;
-  outline: 0px;
+.input:not(textarea) {
+  line-height:  1;
+  height: 2.25rem;
 }
 
-input.error {
-  border: 1px dashed #f00;
+.input:focus {
+    border-color: #eb99a1;
+    outline: 3px solid transparent;
+    box-shadow:  0 0 0 3px #eb99a1aa;
 }
+

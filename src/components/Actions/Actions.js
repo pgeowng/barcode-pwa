@@ -99,7 +99,7 @@ export const Actions = observer(({ store }) => {
 			<br/>
 			<button type="button">preview</button>
 			<br/>
-			<iframe src={dataURI} />
+			{liveUpdate ? <iframe src={dataURI} /> : null}
 			<br/>
 			{store.items.map(item => <BarcodePage item={item} isPreview={true}/>)}
 		</div>

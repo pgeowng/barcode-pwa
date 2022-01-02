@@ -32,7 +32,7 @@ export const ItemTable = observer(({ store }) => {
             </td>
             <td>
               <input
-                className={item.fullBarcode == null ? 'error' : ''}
+                className={`input ${item.fullBarcode == null ? 'error' : ''}`}
                 type="text"
                 value={item.barcode}
                 onChange={(e) => store.updateBarcode(idx, e.target.value)}
@@ -40,6 +40,7 @@ export const ItemTable = observer(({ store }) => {
             </td>
             <td>
               <input
+                className="input"
                 type="text"
                 value={item.shopName}
                 onChange={(e) => store.updateShopName(idx, e.target.value)}
@@ -47,6 +48,7 @@ export const ItemTable = observer(({ store }) => {
             </td>
             <td>
               <input
+                className="input"
                 type="number"
                 value={item.count === 0 ? "" : item.count}
                 placeholder="0"
