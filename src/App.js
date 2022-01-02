@@ -9,8 +9,12 @@ export const App = observer(() => {
   const [store] = useState(() => new BarcodeStore());
   return (
     <div className="App">
-      <ItemTable store={store} />
-      <PdfPreview store={store} />
+      <div className="App-InputTable">
+        <ItemTable store={store} />
+      </div>
+      <div className="App-Control">
+        <PdfPreview store={store} />
+      </div>
     </div>
   );
 });

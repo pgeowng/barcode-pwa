@@ -4,25 +4,33 @@ import { observer } from "mobx-react-lite";
 import { renderToString, renderToStaticMarkup } from "react-dom/server";
 import { autorun, computed } from "mobx";
 
-import Barcode from "react-jsbarcode";
+import { Barcode } from "./Barcode.js";
 
 const cardStyle = {
 	height: "80px",
 	width: "116px",
 	boxSizing: "border-box",
-	border: "1px solid #0f0",
-	backgroundColor: "#f32",
+	// border: "1px solid #0f0",
+	// backgroundColor: "#f32",
 	fontFamily: "'Source Sans Pro', sans-serif",
 	// fontFamily: "'Noto Sans', sans-serif",
+	padding: "8px",
+	border: "1px solid #0005",
 };
 
 const barcodeContainerStyle = {
 	width: "100%",
+	display: "flex",
+	alignItems: "center",
 };
+
 const barcodeStyle = {
 	width: "100%",
 	height: "auto",
+	marginLeft: "8px",
+	marginRight: "8px",
 };
+
 const barcodeProps = {
 	width: 100,
 };
@@ -33,7 +41,7 @@ const textStyle = {
 	textAlign: "center",
 };
 
-const Document = ({ store }) => {
+const Document = ({ store, style = {} }) => {
 	let i = 0;
 
 	return [].concat(
@@ -41,23 +49,12 @@ const Document = ({ store }) => {
 			return Array(item.count)
 				.fill(null)
 				.map((_, j) => (
-					<div style={cardStyle}>
+					<div style={{ ...cardStyle, ...style }}>
 						<div style={barcodeContainerStyle}>
-							<Barcode
-								renderer="svg"
-								value="5034504935778"
-								format="EAN-13"
-								options={{
-									width: 2,
-									displayValue: false,
-								}}
-								style={barcodeStyle}
-							/>
+							<Barcode code={item.barcode} style={barcodeStyle} />
 						</div>
 						<p style={textStyle}>{item.barcode}</p>
-						<p style={textStyle}>
-							{item.shopName} {item.count}
-						</p>
+						<p style={textStyle}>{item.shopName}</p>
 					</div>
 				));
 		})
@@ -73,8 +70,22 @@ const renderPDF = (store) => {
 		format: [58, 40],
 		hotfixes: ["px_scaling"],
 	});
+
 	return new Promise((res, rej) => {
 		doc.setFont("SourceSansPro-Regular");
+		// doc.addPage();
+		// doc.addSvgAsImage(
+		// 	renderToString(<Barcode code="5034504935778" style={barcodeStyle} />),
+		// 	0,
+		// 	0,
+		// 	20,
+		// 	20,
+		// 	"5034504935778",
+		// 	"NONE",
+		// 	0
+		// );
+
+		// res(doc.output("datauristring"));
 		doc.html(htmlString, {
 			callback: (doc) => {
 				doc.deletePage(
@@ -111,7 +122,6 @@ export const PdfPreview = observer(({ store }) => {
 	const [dataURI, setDataURI] = useState("");
 
 	useEffect(() => {
-		console.log("timer sub");
 		if (liveUpdate)
 			return autorun(
 				async () => {
@@ -133,7 +143,7 @@ export const PdfPreview = observer(({ store }) => {
 			Items: {store.items.reduce((acc, item) => item.count + acc, 0)}
 			<button type="button">preview</button>
 			<iframe src={dataURI} />
-			<Document store={store} />
+			<Document store={store} style={{ display: "inline-block" }} />
 		</div>
 	);
 });

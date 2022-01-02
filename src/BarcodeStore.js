@@ -48,8 +48,14 @@ export class BarcodeStore {
     setTimeout(() => {
       this.createItem({
         id: Date.now(),
-        barcode: "12314412",
+        barcode: "5034504935778",
         shopName: "Some Long Shop Name",
+        count: 4,
+      });
+      this.createItem({
+        id: Date.now(),
+        barcode: "1234567890128",
+        shopName: "Another shop name",
         count: 4,
       });
     }, 1000);
