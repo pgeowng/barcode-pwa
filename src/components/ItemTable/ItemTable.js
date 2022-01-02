@@ -4,6 +4,8 @@ import "./ItemTable.css";
 import {InputField} from '../InputField/InputField.js'
 import {Button}from '../Button/Button.js'
 
+import {Trash} from 'react-feather'
+
 export const ItemTable = observer(({ store }) => {
   const handleCount = useCallback(
     (idx) => {
@@ -29,7 +31,7 @@ export const ItemTable = observer(({ store }) => {
         {store.items.map((item, idx) => (
           <tr key={item.id}>
             <td>
-              <Button> x </Button>
+              <Button isIcon> <Trash className="button__icon" /> </Button>
             </td>
             <td>
               <InputField
