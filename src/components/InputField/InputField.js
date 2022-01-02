@@ -19,7 +19,7 @@ export const InputField = ({
 		<input
 			className={`input ${isError ? "input--error" : ""}`}
 			type={type}
-			value={value == null || value=="" || value === placeholder ? "" : value}
+			value={value == null || value==="" || value === placeholder ? "" : value}
 			placeholder={placeholder}
 			onChange={onChange}
 		/>

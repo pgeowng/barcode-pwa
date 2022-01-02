@@ -1,8 +1,8 @@
 import { useCallback } from "react";
 import { observer } from "mobx-react-lite";
-import { action } from "mobx";
 import "./ItemTable.css";
 import {InputField} from '../InputField/InputField.js'
+import {Button}from '../Button/Button.js'
 
 export const ItemTable = observer(({ store }) => {
   const handleCount = useCallback(
@@ -29,7 +29,7 @@ export const ItemTable = observer(({ store }) => {
         {store.items.map((item, idx) => (
           <tr key={item.id}>
             <td>
-              <button type="button" className="button"> x </button>
+              <Button> x </Button>
             </td>
             <td>
               <InputField
@@ -56,9 +56,9 @@ export const ItemTable = observer(({ store }) => {
         ))}
         <tr>
             <td colSpan="4">
-            <button type="button" className="button" onClick={() => store.createItem()}>
+            <Button onClick={() => store.createItem()}>
               Добавить товар
-            </button>
+            </Button>
           </td>
         </tr>
       </tbody>

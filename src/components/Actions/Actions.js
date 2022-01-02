@@ -1,29 +1,23 @@
 import jsPDF from "jspdf";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { observer } from "mobx-react-lite";
-import { renderToString, renderToStaticMarkup } from "react-dom/server";
-import { autorun, computed } from "mobx";
+import { renderToStaticMarkup } from "react-dom/server";
+import { autorun } from "mobx";
 
 import { BarcodePage } from "../BarcodePage/BarcodePage.js";
 
-
 const EndDocument = ({ store, style = {} }) => {
-	let i = 0;
-
 	return [].concat(
 		...store.items.map((item, i) => {
 			return Array(item.count)
 				.fill(null)
-				.map((_, j) => (
-					<BarcodePage item={item} />
-				));
+				.map((_, j) => <BarcodePage item={item} />);
 		})
 	);
 };
 
 const renderPDF = (store) => {
 	const htmlString = renderToStaticMarkup(<EndDocument store={store} />);
-	console.log(htmlString);
 	const doc = new jsPDF({
 		orientation: "l",
 		unit: "mm",
@@ -65,21 +59,27 @@ const renderPDF = (store) => {
 const updateTimeout = 3000;
 
 export const Actions = observer(({ store }) => {
-	const [liveUpdate, setLiveUpdate] = useState(true);
+	const [liveUpdate, setLiveUpdate] = useState(false);
 	const [dataURI, setDataURI] = useState("");
-	const [error, setError] = useState('')
+	const [error, setError] = useState(null);
 
 	useEffect(() => {
-		if (liveUpdate)
 			return autorun(
 				async () => {
-					if (store.items.reduce((acc, n) => acc && n.fullBarcode != null, true)) {
-					setDataURI(await renderPDF(store))
-					setError('')
-					} else {
-						setError('ошибка в воде кода!')
+					const predicate = store.items.reduce((acc, item) => {
+						console.log(item.fullBarcode != null);
+						return acc && item.fullBarcode != null;
+					}, true);
+
+					if (!predicate) {
+						setError("ошибка в воде кода!");
+						return;
 					}
 
+					setError(null);
+					
+					if (!liveUpdate) return;
+					setDataURI(await renderPDF(store));
 				},
 				{ delay: updateTimeout }
 			);
@@ -87,21 +87,29 @@ export const Actions = observer(({ store }) => {
 
 	return (
 		<div className="Preview">
-			{error.length === 0 ? '' : <>{error}<br/></>}
+					{error}
+					<br />
 			<input
 				id="enableLiveUpdate"
 				type="checkbox"
 				checked={liveUpdate}
 				onChange={(e) => setLiveUpdate(!liveUpdate)}
 			/>
-			<label for="enableLiveUpdate">Обновлять превью</label><br/>
+			<label htmlFor="enableLiveUpdate">Обновлять превью</label>
+			<br />
 			Items: {store.items.reduce((acc, item) => item.count + acc, 0)}
-			<br/>
-			<button type="button" className="buttonu">preview</button>
-			<br/>
+			<br />
+			<button type="button" className="buttonu">
+				preview
+			</button>
+			<br />
 			{liveUpdate ? <iframe src={dataURI} /> : null}
-			<br/>
-			{store.items.map(item => <BarcodePage item={item} isPreview={true}/>)}
+			<br />
+			{store.items.map((item) =>
+				item.fullBarcode == null ? null : (
+					<BarcodePage item={item} isPreview={true} />
+				)
+			)}
 		</div>
 	);
 });
