@@ -1,13 +1,12 @@
 import { useCallback } from "react";
 import { observer } from "mobx-react-lite";
 import { action } from "mobx";
+import "./ItemTable.css";
 
 export const ItemTable = observer(({ store }) => {
   const handleCount = useCallback(
     (idx) => {
-      console.log("render handlecount", idx);
       return (e) => {
-        console.log("parsed", e.target.value);
         const value = parseInt(e.target.value || 0);
         if (!isNaN(value)) store.updateCount(idx, value);
       };
@@ -16,7 +15,7 @@ export const ItemTable = observer(({ store }) => {
   );
 
   return (
-    <table className="App-ItemTable">
+    <table className="item-table">
       <thead>
         <tr>
           <th></th>
@@ -33,6 +32,7 @@ export const ItemTable = observer(({ store }) => {
             </td>
             <td>
               <input
+                className={item.fullBarcode == null ? 'error' : ''}
                 type="text"
                 value={item.barcode}
                 onChange={(e) => store.updateBarcode(idx, e.target.value)}

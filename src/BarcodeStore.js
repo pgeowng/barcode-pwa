@@ -1,5 +1,28 @@
 import { makeObservable, observable, action, runInAction } from "mobx";
 
+const ean13checksum = (data) => {
+  const res = data
+    .substr(0, 12)
+    .split("")
+    .map((num) => parseInt(num, 10))
+    .reduce((sum, n, idx) => sum + (idx % 2 ? n * 3 : n), 0);
+
+  const num = (10 - (res % 10)) % 10;
+  console.log("checksum", data, num);
+  return num;
+};
+
+const fullBarcode = (item) => {
+  return item == null || item.barcode == null
+    ? null
+    : item.barcode.length === 12
+    ? item.barcode + ean13checksum(item.barcode)
+    : item.barcode.length === 13 &&
+      +item.barcode[12] === ean13checksum(item.barcode)
+    ? item.barcode
+    : null;
+};
+
 export class BarcodeStore {
   items = [];
 
@@ -22,25 +45,24 @@ export class BarcodeStore {
       shopName: "",
       count: 0,
       ...item,
+      fullBarcode: fullBarcode(item)
     });
   }
 
   updateItem(idx, update) {
     if (idx < 0 || idx >= this.items.size) return null;
-    this.items[idx] = update;
+    this.items[idx] = { ...update, fullBarcode: fullBarcode(update) };
     return this.items[idx];
   }
 
   updateBarcode(idx, update) {
-    console.log("updating state");
     this.items[idx].barcode = update;
+    this.items[idx].fullBarcode = fullBarcode(this.items[idx]);
   }
   updateShopName(idx, update) {
-    console.log("updating state");
     this.items[idx].shopName = update;
   }
   updateCount(idx, update) {
-    console.log("updating", update);
     this.items[idx].count = update;
   }
 

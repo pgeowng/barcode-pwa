@@ -1,0 +1,30 @@
+.barcode-page {
+	height: 80px;
+	width: 116px;
+	box-sizing: border-box;
+	font-family: 'Source Sans Pro', sans-serif;
+	padding:  8px;
+}
+
+.barcode-page--preview {
+	border: 1px solid #0005;
+}
+
+.barcode-page__barcode {
+	width:  100%;
+	display:  flex;
+	align-items: center;
+}
+
+.barcode-page__text {
+	text-align: center;
+} 
+
+.barcode-text {
+	margin: 0;
+	font-size:  10px;
+	}
+.barcode-img {
+	width:  100%;
+	height: auto;
+}

@@ -38,3 +38,7 @@ input:focus {
   border: 1px solid #eb99a1;
   outline: 0px;
 }
+
+input.error {
+  border: 1px dashed #f00;
+}

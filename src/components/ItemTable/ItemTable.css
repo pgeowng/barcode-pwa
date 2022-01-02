@@ -1,0 +1,13 @@
+.item-table {
+  text-align: justify;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.item-table td,
+.item-table th {
+  padding: 0.5em;
+  width: 100%;
+  border-bottom: 1px solid #f1f1f1;
+  text-align: left;
+}
