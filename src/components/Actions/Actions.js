@@ -97,7 +97,7 @@ export const Actions = observer(({ store }) => {
 			<label for="enableLiveUpdate">Обновлять превью</label><br/>
 			Items: {store.items.reduce((acc, item) => item.count + acc, 0)}
 			<br/>
-			<button type="button">preview</button>
+			<button type="button" className="buttonu">preview</button>
 			<br/>
 			{liveUpdate ? <iframe src={dataURI} /> : null}
 			<br/>

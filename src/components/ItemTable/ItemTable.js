@@ -2,12 +2,13 @@ import { useCallback } from "react";
 import { observer } from "mobx-react-lite";
 import { action } from "mobx";
 import "./ItemTable.css";
+import {InputField} from '../InputField/InputField.js'
 
 export const ItemTable = observer(({ store }) => {
   const handleCount = useCallback(
     (idx) => {
-      return (e) => {
-        const value = parseInt(e.target.value || 0);
+      return (val) => {
+        const value = parseInt(val);
         if (!isNaN(value)) store.updateCount(idx, value);
       };
     },
@@ -28,38 +29,34 @@ export const ItemTable = observer(({ store }) => {
         {store.items.map((item, idx) => (
           <tr key={item.id}>
             <td>
-              <button type="button"> x </button>
+              <button type="button" className="button"> x </button>
             </td>
             <td>
-              <input
-                className={`input ${item.fullBarcode == null ? 'error' : ''}`}
-                type="text"
+              <InputField
                 value={item.barcode}
-                onChange={(e) => store.updateBarcode(idx, e.target.value)}
+                updateValue={(val) => store.updateBarcode(idx, val)}
+                isError={item.fullBarcode == null}
               />
             </td>
             <td>
-              <input
-                className="input"
-                type="text"
+              <InputField
                 value={item.shopName}
-                onChange={(e) => store.updateShopName(idx, e.target.value)}
+                updateValue={(val) => store.updateShopName(idx, val)}
               />
             </td>
             <td>
-              <input
-                className="input"
+              <InputField 
                 type="number"
-                value={item.count === 0 ? "" : item.count}
+                value={item.count}
                 placeholder="0"
-                onChange={handleCount(idx)}
+                updateValue={handleCount(idx)}
               />
             </td>
           </tr>
         ))}
         <tr>
-          <td colSpan="4">
-            <button type="button" onClick={() => store.createItem()}>
+            <td colSpan="4">
+            <button type="button" className="button" onClick={() => store.createItem()}>
               Добавить товар
             </button>
           </td>
